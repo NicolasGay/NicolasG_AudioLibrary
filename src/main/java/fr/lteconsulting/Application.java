@@ -1,39 +1,20 @@
 package fr.lteconsulting;
 
+import fr.lteconsulting.dao.ChansonDAO;
+import fr.lteconsulting.dao.DisqueDAO;
+import fr.lteconsulting.dao.MySQLDatabaseConnection;
 import fr.lteconsulting.modele.Bibliotheque;
-import fr.lteconsulting.modele.Chanson;
-import fr.lteconsulting.modele.Disque;
 
 public class Application
 {
 	public static void main( String[] args )
 	{
-		Bibliotheque b = new Bibliotheque();
-		
-		/*
-		DisqueDAO dao = new DisqueDAO();
-		List<Disque> disquesBDD = dao.findAll();
-		
-		for(Disque currentDisc : disquesBDD){
-			b.ajouterDisque(currentDisc);
-		}
-		*/
-		
-		
-		Disque d = new Disque( "La Lune" );
-		d.addChanson( new Chanson( "Titre", 34 ) );
-		d.addChanson( new Chanson( "Titre", 34 ) );
-		b.ajouterDisque( d );
+		MySQLDatabaseConnection databaseConnection = new MySQLDatabaseConnection();
+		ChansonDAO chansonDao = new ChansonDAO( databaseConnection );
+		DisqueDAO disqueDao = new DisqueDAO( databaseConnection, chansonDao );
 
-		d = new Disque( "Le soleil" );
-		d.addChanson( new Chanson( "Titre", 34 ) );
-		d.addChanson( new Chanson( "Blah", 23 ) );
-		d.addChanson( new Chanson( "Titre", 34 ) );
-		d.addChanson( new Chanson( "Titre", 34 ) );
-		d.addChanson( new Chanson( "Titre", 34 ) );
-		b.ajouterDisque( d );
-		
-		
+		Bibliotheque b = new Bibliotheque( disqueDao );
+
 		InferfaceUtilisateur ui = new InferfaceUtilisateur( b );
 
 		ui.execute();

@@ -1,74 +1,60 @@
 package fr.lteconsulting.modele;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import fr.lteconsulting.dao.DisqueDAO;
 
 public class Bibliotheque
 {
-	//private Map<String, Disque> disques = new HashMap<>();
-	DisqueDAO dao = new DisqueDAO();
+	private DisqueDAO disqueDao;
+
+	public Bibliotheque( DisqueDAO disqueDao )
+	{
+		this.disqueDao = disqueDao;
+	}
 
 	public void ajouterDisque( Disque disque )
 	{
-		//disques.put( disque.getCodeBarre(), disque );
-		dao.add(disque);
+		disqueDao.addNewDiscInBDD( disque );
 	}
 
 	public List<Disque> getDisques()
 	{
-		//return new ArrayList<>( disques.values() );
-		return dao.findAll();
+		return disqueDao.findAllDiscs();
 	}
 
 	public Disque rechercherDisqueParCodeBarre( String codeBarre )
 	{
-		//return disques.get( codeBarre );
-		return dao.findById(codeBarre);
+		return disqueDao.findDiscById( codeBarre );
 	}
 
 	public List<Disque> rechercherDisqueParNom( String recherche )
 	{
-		recherche = recherche.toLowerCase();
-		List<Disque> resultat = new ArrayList<>();
-
-		for( Disque disque : this.getDisques() )
-		{
-			if( disque.getNom().toLowerCase().contains( recherche ) )
-				resultat.add( disque );
-		}
-
-		return resultat;
+		return disqueDao.findDiscsByName( recherche );
 	}
 
 	public List<Disque> rechercherDisqueParNom( List<String> termes )
 	{
-		List<Disque> resultat = new ArrayList<>();
+		Map<String, Disque> validDisques = new HashMap<>();
 
-		for( Disque disque : /*disques.values()*/ this.getDisques() )
+		for( String terme : termes )
 		{
-			boolean estValide = true;
-			for( String terme : termes )
-			{
-				if( !disque.getNom().toLowerCase().contains( terme.toLowerCase() ) )
-				{
-					estValide = false;
-					break;
-				}
-			}
-
-			if( estValide )
-				resultat.add( disque );
+			for( Disque disque : disqueDao.findDiscsByName( terme ) )
+				validDisques.put( disque.getCodeBarre(), disque );
 		}
 
-		return resultat;
+		return new ArrayList<>( validDisques.values() );
 	}
 
 	public void afficher()
 	{
-		System.out.println( "BIBLIOTHEQUE avec " + /*disques.size()*/this.getDisques().size() + " disques" );
-		for( Disque disque : /*disques.values()*/this.getDisques() )
+		List<Disque> disques = disqueDao.findAllDiscs();
+
+		System.out.println( "BIBLIOTHEQUE avec " + disques.size() + " disques" );
+		for( Disque disque : disques )
 			disque.afficher();
 	}
 }

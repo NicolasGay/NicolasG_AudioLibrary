@@ -15,7 +15,7 @@ public class GenerateurDisque
 		int nbChansons = 3 + new Random().nextInt( 10 );
 
 		while( nbChansons-- > 0 )
-			disque.addChanson( creerChanson() );
+			disque.addSongInDisc( creerChanson() );
 
 		return disque;
 	}
