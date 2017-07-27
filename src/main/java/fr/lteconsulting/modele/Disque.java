@@ -1,14 +1,16 @@
 package fr.lteconsulting.modele;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
+
+import fr.lteconsulting.dao.ChansonDAO;
 
 public class Disque
 {
 	private String codeBarre;
 	private String nom;
-	private List<Chanson> chansons = new ArrayList<>();
+	
+	ChansonDAO dao=new ChansonDAO();
+	//private List<Chanson> chansons = new ArrayList<>();
 
 	public Disque( String nom )
 	{
@@ -43,14 +45,15 @@ public class Disque
 
 	public void addChanson( Chanson chanson )
 	{
-		chansons.add( chanson );
+		//chansons.add( chanson );
+		dao.addSong(this, chanson);
 	}
 
 	public int getDuree()
 	{
 		int duree = 0;
 
-		for( Chanson chanson : chansons )
+		for( Chanson chanson : /*chansons*/dao.findAll() )
 			duree += chanson.getDureeEnSecondes();
 
 		return duree;
@@ -66,7 +69,7 @@ public class Disque
 		System.out.println( "DISQUE [" + codeBarre + "] " + nom + ", durée: " + getDuree() );
 		if( avecTitres )
 		{
-			for( Chanson chanson : chansons )
+			for( Chanson chanson : /*chansons*/dao.findAll() )
 				chanson.afficher();
 		}
 	}

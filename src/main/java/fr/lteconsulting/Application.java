@@ -9,7 +9,17 @@ public class Application
 	public static void main( String[] args )
 	{
 		Bibliotheque b = new Bibliotheque();
-
+		
+		/*
+		DisqueDAO dao = new DisqueDAO();
+		List<Disque> disquesBDD = dao.findAll();
+		
+		for(Disque currentDisc : disquesBDD){
+			b.ajouterDisque(currentDisc);
+		}
+		*/
+		
+		
 		Disque d = new Disque( "La Lune" );
 		d.addChanson( new Chanson( "Titre", 34 ) );
 		d.addChanson( new Chanson( "Titre", 34 ) );
@@ -22,6 +32,7 @@ public class Application
 		d.addChanson( new Chanson( "Titre", 34 ) );
 		d.addChanson( new Chanson( "Titre", 34 ) );
 		b.ajouterDisque( d );
+		
 		
 		InferfaceUtilisateur ui = new InferfaceUtilisateur( b );
 
